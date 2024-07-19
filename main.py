@@ -7,7 +7,7 @@ def generate_qr_codes():
     # Clear previous QR codes
     for widget in qr_frame.winfo_children():
         widget.destroy()
-    
+
     # Get the CSV input from the entry widget
     csv_values = entry.get()
     values = [value.strip() for value in csv_values.split(',')]
@@ -26,14 +26,22 @@ def generate_qr_codes():
         qr_image = qr.make_image(fill='black', back_color='white')
         qr_image_tk = ImageTk.PhotoImage(qr_image)
 
+        # Create a frame for each QR code and its label
+        qr_code_container = tk.Frame(qr_frame)
+        qr_code_container.pack(pady=5)
+
         # Create a label for the QR code
-        qr_code_label = tk.Label(qr_frame, image=qr_image_tk)
+        qr_code_label = tk.Label(qr_code_container, image=qr_image_tk)
         qr_code_label.image = qr_image_tk  # Keep a reference to avoid garbage collection
-        qr_code_label.pack(pady=5)
+        qr_code_label.pack()
 
         # Create a label for the meaning
-        meaning_label = tk.Label(qr_frame, text=value)
-        meaning_label.pack(pady=5)
+        meaning_label = tk.Label(qr_code_container, text=value)
+        meaning_label.pack()
+
+    # Update scroll region
+    qr_frame.update_idletasks()
+    qr_canvas.config(scrollregion=qr_canvas.bbox("all"))
 
 def on_generate_button_click(event=None):
     csv_values = entry.get()
@@ -60,9 +68,17 @@ entry.bind('<Return>', on_generate_button_click)
 generate_button = tk.Button(root, text="Generate QR Codes", command=on_generate_button_click)
 generate_button.pack(padx=10, pady=10)
 
-# Create a frame to display the generated QR codes
-qr_frame = tk.Frame(root)
-qr_frame.pack(padx=10, pady=10)
+# Create a canvas and a frame for the QR codes
+qr_canvas = tk.Canvas(root, width=600, height=400)
+qr_canvas.pack(side=tk.LEFT, padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+scrollbar_y = tk.Scrollbar(root, orient=tk.VERTICAL, command=qr_canvas.yview)
+scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+
+qr_canvas.configure(yscrollcommand=scrollbar_y.set)
+
+qr_frame = tk.Frame(qr_canvas)
+qr_canvas.create_window((0, 0), window=qr_frame, anchor="nw")
 
 # Run the Tkinter event loop
 root.mainloop()
