@@ -50,6 +50,10 @@ def on_generate_button_click(event=None):
     else:
         messagebox.showwarning("Input Error", "Please enter comma-separated values.")
 
+def on_mouse_wheel(event):
+    # Scroll the canvas vertically based on the mouse wheel movement
+    qr_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
 # Create the main window
 root = tk.Tk()
 root.title("CSV to QR Code Generator")
@@ -79,6 +83,9 @@ qr_canvas.configure(yscrollcommand=scrollbar_y.set)
 
 qr_frame = tk.Frame(qr_canvas)
 qr_canvas.create_window((0, 0), window=qr_frame, anchor="nw")
+
+# Bind the mouse wheel event to the canvas
+root.bind_all("<MouseWheel>", on_mouse_wheel)
 
 # Run the Tkinter event loop
 root.mainloop()
