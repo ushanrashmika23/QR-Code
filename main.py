@@ -17,7 +17,7 @@ def generate_qr_codes():
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
+            box_size=5,
             border=4,
         )
         qr.add_data(value)
@@ -27,17 +27,17 @@ def generate_qr_codes():
         qr_image_tk = ImageTk.PhotoImage(qr_image)
 
         # Create a frame for each QR code and its label
-        qr_code_container = tk.Frame(qr_frame)
-        qr_code_container.pack(pady=5)
+        qr_code_container = tk.Frame(qr_frame, padx=10, pady=5)
+        qr_code_container.pack(anchor='w', fill=tk.X)
 
         # Create a label for the QR code
         qr_code_label = tk.Label(qr_code_container, image=qr_image_tk)
         qr_code_label.image = qr_image_tk  # Keep a reference to avoid garbage collection
-        qr_code_label.pack()
+        qr_code_label.pack(side=tk.LEFT)
 
-        # Create a label for the meaning
-        meaning_label = tk.Label(qr_code_container, text=value)
-        meaning_label.pack()
+        # Create a label for the meaning with text wrapping
+        meaning_label = tk.Label(qr_code_container, text=value, wraplength=300, anchor='w', justify=tk.LEFT)
+        meaning_label.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
 
     # Update scroll region
     qr_frame.update_idletasks()
