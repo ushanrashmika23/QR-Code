@@ -35,7 +35,7 @@ def generate_qr_codes():
         meaning_label = tk.Label(qr_frame, text=value)
         meaning_label.pack(pady=5)
 
-def on_generate_button_click():
+def on_generate_button_click(event=None):
     csv_values = entry.get()
     if csv_values:
         generate_qr_codes()
@@ -52,6 +52,9 @@ label.pack(padx=10, pady=5)
 
 entry = tk.Entry(root, width=50)
 entry.pack(padx=10, pady=5)
+
+# Bind the Enter key to the on_generate_button_click function
+entry.bind('<Return>', on_generate_button_click)
 
 # Create a button to generate the QR codes
 generate_button = tk.Button(root, text="Generate QR Codes", command=on_generate_button_click)
