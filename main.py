@@ -44,16 +44,14 @@ def generate_qr_codes():
 
         # Create a label for the QR code
         qr_code_label = tk.Label(qr_code_container, image=qr_image_tk)
-        qr_code_label.image = (
-            qr_image_tk  # Keep a reference to avoid garbage collection
-        )
-        qr_code_label.pack(side=tk.LEFT)
+        qr_code_label.image = qr_image_tk  # Keep a reference to avoid garbage collection
+        qr_code_label.grid(row=0, column=0, rowspan=2, sticky="w")
 
         # Create a label for the meaning with text wrapping
         meaning_label = tk.Label(
             qr_code_container, text=value, wraplength=300, anchor="w", justify=tk.LEFT
         )
-        meaning_label.pack(side=tk.LEFT, padx=10, fill=tk.X, expand=True)
+        meaning_label.grid(row=0, column=1, padx=10, sticky="w")
 
         # Create a save button for each QR code
         save_button = tk.Button(
@@ -63,7 +61,7 @@ def generate_qr_codes():
                 qr_image, value
             ),
         )
-        save_button.pack(side=tk.LEFT, padx=10)
+        save_button.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
     # Update scroll region
     qr_frame.update_idletasks()
